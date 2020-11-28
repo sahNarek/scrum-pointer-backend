@@ -10,10 +10,6 @@ module Api
         variables = prepare_variables(params[:variables])
         query = params[:query]
         operation_name = params[:operationName]
-        context = {
-          # Query context goes here, for example:
-          # current_user: current_user,
-        }
         result = ScrumPointerBackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
         render json: result
       rescue => e
@@ -22,7 +18,14 @@ module Api
       end
     
       private
-    
+
+      def context 
+        {
+          session: session,
+          current_user: AuthHelper::find_user_by_token(session[:token])
+        }
+      end
+      
       # Handle variables in form data, JSON body, or a blank value
       def prepare_variables(variables_param)
         case variables_param
