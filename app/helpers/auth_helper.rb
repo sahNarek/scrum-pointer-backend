@@ -16,9 +16,7 @@ module AuthHelper
   def find_user_by_token(token)
     unless token.blank?
       user_id = crypt.decrypt_and_verify(token).gsub('user-id', '').to_i
-      p "the user id, #{user_id}"
-      user = User.find(user_id)
-      user
+      User.find(user_id)
     end
     rescue ActiveSupport::MessageVerifier::InvalidSignature
       nil
