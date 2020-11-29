@@ -10,8 +10,8 @@ class Mutations::UserSignIn < Mutations::BaseMutation
   def resolve(email:, password:)
     payload = AuthHelper::user_sign_in email, password
     context[:session][:token] = payload[:token]
+    #TODO remove after changing current_user logic to use request headers
     context[:current_user] = AuthHelper::find_user_by_token payload[:token]
-    p "the current user, #{context[:current_user]}"
     payload
   end
 end
