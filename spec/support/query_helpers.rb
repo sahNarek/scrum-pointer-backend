@@ -42,5 +42,35 @@ module QueryHelpers
     GQL
   end
 
-  module_function :sign_up, :sign_in
+  def create_session(user:)
+    <<~GQL
+    mutation{
+      userSignIn(input:{
+        email: "#{user.email}",
+        password: "#{user.password}"
+      }){
+        user{
+          id
+          firstName
+          lastName
+          email
+        }
+        token
+        expTime
+        errors
+      }
+      createSession(input:{}){
+        session{
+          id
+          name
+          userId
+          votingDuration
+        }
+        errors
+      }
+    }
+    GQL
+  end
+
+  module_function :sign_up, :sign_in, :create_session
 end
