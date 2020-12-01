@@ -5,7 +5,7 @@ module AuthHelper
   def user_sign_in(email, password)
     user = User.find_by(email: email)
     errors = []
-    unless user.nil? && user.authenticate(password)
+    if user.present? && user.authenticate(password)
       begin
         exp_time = Time.now + 24.hours
         payload = {
