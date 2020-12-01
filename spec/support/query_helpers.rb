@@ -1,5 +1,5 @@
 module QueryHelpers
-  def signup_query(user:)
+  def sign_up(user:)
     <<~GQL
     mutation{
       userSignUp(input:{
@@ -21,5 +21,26 @@ module QueryHelpers
     GQL
   end
 
-  module_function :signup_query
+  def sign_in(user:)
+    <<~GQL
+    mutation{
+      userSignIn(input:{
+        email: "#{user.email}",
+        password: "#{user.password}"
+      }){
+        user{
+          id
+          firstName
+          lastName
+          email
+        }
+        token
+        expTime
+        errors
+      }
+    }
+    GQL
+  end
+
+  module_function :sign_up, :sign_in
 end

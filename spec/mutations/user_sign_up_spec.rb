@@ -6,9 +6,9 @@ RSpec.describe Mutations::UserSignUp, type: :request do
     context 'when the user credentials are correct' do 
       let(:user){ build_stubbed(:user)}
       let(:json_response){ JSON.parse(response.body)['data'] }
-      
+
       before do 
-        post '/api/v1/graphql', params: {query: QueryHelpers::signup_query(user: user)}
+        post '/api/v1/graphql', params: {query: QueryHelpers::sign_up(user: user)}
       end
 
       it 'creates a new user without errors' do
@@ -25,6 +25,27 @@ RSpec.describe Mutations::UserSignUp, type: :request do
           "lastName" => user.last_name
         )
       end
+    end
+
+    context 'when the user\'s credentials are wrong' do
+      let(:user){ build_stubbed(:user)}
+      let(:json_response){ JSON.parse(response.body)['data'] }
+
+      before do 
+        user.password_confirmation = '12344444'
+        post '/api/v1/graphql', params: {query: QueryHelpers::sign_up(user: user)}
+      end
+
+      it 'shows an error' do
+        errors = json_response['userSignUp']['errors']
+        expect(errors).to match_array(["Password confirmation doesn't match Password"])
+      end
+
+      it 'does not create a user' do
+        created_user = json_response['userSignUp']['user']
+        expect(created_user).to be nil
+      end
+
     end
 
   end
