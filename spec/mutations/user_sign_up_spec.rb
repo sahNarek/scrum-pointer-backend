@@ -1,38 +1,31 @@
 require 'rails_helper'
+require_relative '../support/query_helpers'
 
-module Mutations
-  RSpec.describe UserSignUp, type: :request do
-    describe '.resolve' do
-      it 'Creates a new user' do
-        user = build(:user)
-        post '/api/v1/graphql', params: {query: signup_query(user: user)}
-        json = JSON.parse(response.body)
-        errors = json['data']['userSignUp']['errors']
+RSpec.describe Mutations::UserSignUp, type: :request do
+  describe '#resolve' do
+    context 'when the user credentials are correct' do 
+      let(:user){ build_stubbed(:user)}
+      let(:json_response){ JSON.parse(response.body)['data'] }
+      
+      before do 
+        post '/api/v1/graphql', params: {query: QueryHelpers::signup_query(user: user)}
+      end
 
+      it 'creates a new user without errors' do
+        errors = json_response['userSignUp']['errors']
         expect(errors).to match_array([])
+      end
+  
+      it 'saves correct information' do
+        created_user = json_response['userSignUp']['user']
+        expect(created_user).to include(
+          "id" => be_present,
+          "email" => user.email,
+          "firstName" => user.first_name,
+          "lastName" => user.last_name
+        )
       end
     end
 
-    def signup_query(user:)
-      <<~GQL
-      mutation{
-        userSignUp(input:{
-          email: "#{user.email}"
-          firstName: "#{user.first_name}"
-          lastName: "#{user.last_name}"
-          password: "#{user.password}"
-          passwordConfirmation: "#{user.password_confirmation}"
-        }){
-          user{
-            id
-            firstName
-            lastName
-            email
-          }
-          errors
-        }
-      }
-      GQL
-    end
   end
 end
