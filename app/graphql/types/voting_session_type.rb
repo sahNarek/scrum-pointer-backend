@@ -1,5 +1,5 @@
 module Types
-  class SessionType < Types::BaseObject
+  class VotingSessionType < Types::BaseObject
     field :id, ID, null: false
     field :user_id, ID, null: false
     field :name, String, null: true

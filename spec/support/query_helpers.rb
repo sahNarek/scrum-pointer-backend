@@ -42,7 +42,7 @@ module QueryHelpers
     GQL
   end
 
-  def create_session(user:)
+  def create_voting_session(user:)
     <<~GQL
     mutation{
       userSignIn(input:{
@@ -59,8 +59,8 @@ module QueryHelpers
         expTime
         errors
       }
-      createSession(input:{}){
-        session{
+      createVotingSession(input:{}){
+        votingSession{
           id
           name
           userId
@@ -72,5 +72,5 @@ module QueryHelpers
     GQL
   end
 
-  module_function :sign_up, :sign_in, :create_session
+  module_function :sign_up, :sign_in, :create_voting_session
 end
