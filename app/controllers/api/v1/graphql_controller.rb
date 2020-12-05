@@ -27,7 +27,7 @@ module Api
       end
 
       def token
-        request&.headers["Auth"]&.split(" ")&.last
+        request&.headers["AUTH-TOKEN"]
       end
       # Handle variables in form data, JSON body, or a blank value
       def prepare_variables(variables_param)
