@@ -42,6 +42,23 @@ module QueryHelpers
     GQL
   end
 
+  def get_user(id:)
+    <<~GQL
+    query{
+      user(id:"#{id}"){
+        id
+        firstName
+        lastName
+        email
+        votingSessions {
+          id
+          name
+        }
+      }
+    }
+    GQL
+  end
+
   def create_voting_session(user:)
     <<~GQL
     mutation{
@@ -72,5 +89,5 @@ module QueryHelpers
     GQL
   end
 
-  module_function :sign_up, :sign_in, :create_voting_session
+  module_function :sign_up, :sign_in, :create_voting_session, :get_user
 end
