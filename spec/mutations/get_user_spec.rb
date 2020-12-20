@@ -12,7 +12,6 @@ RSpec.describe Queries::GetUser, type: :request do
       end
 
       it "gets the current user's credentials" do
-        p json_response
         created_user = json_response['user']
         expect(created_user).to include(
           "id" => be_present,
