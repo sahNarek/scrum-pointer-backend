@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_184723) do
+ActiveRecord::Schema.define(version: 2020_12_23_195611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,10 @@ ActiveRecord::Schema.define(version: 2020_12_23_184723) do
     t.boolean "final_estimate", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "voting_session_id", null: false
     t.index ["ticket_id"], name: "index_estimates_on_ticket_id"
     t.index ["voter_id"], name: "index_estimates_on_voter_id"
+    t.index ["voting_session_id"], name: "index_estimates_on_voting_session_id"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -65,6 +67,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_184723) do
 
   add_foreign_key "estimates", "tickets"
   add_foreign_key "estimates", "voters"
+  add_foreign_key "estimates", "voting_sessions"
   add_foreign_key "tickets", "voting_sessions"
   add_foreign_key "voters", "voting_sessions"
   add_foreign_key "voting_sessions", "users"

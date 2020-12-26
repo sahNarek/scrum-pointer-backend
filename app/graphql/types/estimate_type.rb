@@ -3,6 +3,7 @@ module Types
     field :id, ID, null: false
     field :ticket_id, ID, null: false
     field :voter_id, ID, null: false
-    field :point, Numeric, null: false
+    field :point, Integer, null: false
+    field :final_estimate, Boolean, null: false
   end
 end
