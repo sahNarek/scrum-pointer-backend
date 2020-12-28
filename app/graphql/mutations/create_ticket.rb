@@ -3,7 +3,7 @@ module Mutations
     argument :name, String, required: true
     argument :voting_session_id, ID, required: true
 
-    field :ticket, Types::TicketType, null: false
+    field :ticket, Types::TicketType, null: true
     field :errors, [String], null: true
 
     def resolve(name:, voting_session_id:)

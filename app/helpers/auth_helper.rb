@@ -33,6 +33,8 @@ module AuthHelper
       User.find(user_id) if exp_time >= Time.now
     rescue JWT::DecodeError
       nil
+    rescue ActiveRecord::RecordNotFound
+      nil
     end
   end
 
