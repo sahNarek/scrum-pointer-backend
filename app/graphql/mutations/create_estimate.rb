@@ -15,7 +15,7 @@ module Mutations
 
       if estimate.valid?
         estimate.save!
-        # ScrumPointerBackend.subscriptions.trigger(:estimate_added_to_ticket, { ticket_id: ticket_id }, estimate)
+        ScrumPointerBackendSchema.subscriptions.trigger(:estimate_added_to_ticket, { ticket_id: ticket_id }, estimate)
         {
           estimate: estimate,
           errors: []
