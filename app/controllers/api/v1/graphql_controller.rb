@@ -19,13 +19,16 @@ module Api
     
       private
 
-      def context 
+      def context
         {
           session: session,
           current_user: AuthHelper::find_user_by_token(token)
         }
       end
-      
+
+      def token
+        request&.headers["authorization"]
+      end
       # Handle variables in form data, JSON body, or a blank value
       def token
         if session[:token].nil?

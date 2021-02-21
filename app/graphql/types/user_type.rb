@@ -4,6 +4,6 @@ module Types
     field :email, String, null: false
     field :first_name, String, null: true
     field :last_name, String, null: true
-    field :sessions, [Types::SessionType], null: false
+    field :voting_sessions, [Types::VotingSessionType], null: false
   end
 end

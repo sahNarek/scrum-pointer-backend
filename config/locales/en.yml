@@ -31,3 +31,4 @@
 
 en:
   no_user_signed_in: "Please sign in order to create a session"
+  wrong_credentials: "The entered credentials are wrong or the user does not exist"

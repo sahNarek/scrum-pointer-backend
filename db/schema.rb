@@ -10,19 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_28_194152) do
+ActiveRecord::Schema.define(version: 2020_12_23_195611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "name"
-    t.integer "voting_duration"
+  create_table "estimates", force: :cascade do |t|
+    t.bigint "voter_id", null: false
+    t.bigint "ticket_id", null: false
+    t.decimal "point"
+    t.boolean "final_estimate", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "active"
-    t.index ["user_id"], name: "index_sessions_on_user_id"
+    t.bigint "voting_session_id", null: false
+    t.index ["ticket_id"], name: "index_estimates_on_ticket_id"
+    t.index ["voter_id"], name: "index_estimates_on_voter_id"
+    t.index ["voting_session_id"], name: "index_estimates_on_voting_session_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.string "name"
+    t.boolean "estimated", default: false
+    t.bigint "voting_session_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["voting_session_id"], name: "index_tickets_on_voting_session_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -35,5 +47,28 @@ ActiveRecord::Schema.define(version: 2020_11_28_194152) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "sessions", "users"
+  create_table "voters", force: :cascade do |t|
+    t.string "name"
+    t.bigint "voting_session_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["voting_session_id"], name: "index_voters_on_voting_session_id"
+  end
+
+  create_table "voting_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.integer "voting_duration"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active"
+    t.index ["user_id"], name: "index_voting_sessions_on_user_id"
+  end
+
+  add_foreign_key "estimates", "tickets"
+  add_foreign_key "estimates", "voters"
+  add_foreign_key "estimates", "voting_sessions"
+  add_foreign_key "tickets", "voting_sessions"
+  add_foreign_key "voters", "voting_sessions"
+  add_foreign_key "voting_sessions", "users"
 end
