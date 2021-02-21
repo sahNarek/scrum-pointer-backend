@@ -22,11 +22,19 @@ module Api
       def context 
         {
           session: session,
-          current_user: AuthHelper::find_user_by_token(session[:token])
+          current_user: AuthHelper::find_user_by_token(token)
         }
       end
       
       # Handle variables in form data, JSON body, or a blank value
+      def token
+        if session[:token].nil?
+          request&.headers["AUTH-TOKEN"]
+        else
+          session[:token]
+        end
+      end
+
       def prepare_variables(variables_param)
         case variables_param
         when String
