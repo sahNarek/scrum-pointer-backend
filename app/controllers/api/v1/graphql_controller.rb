@@ -23,7 +23,7 @@ module Api
         {
           session: session,
           current_user: AuthHelper::find_user_by_token(token)
-        }
+        }        # binding.pry
       end
 
       def token
@@ -32,7 +32,7 @@ module Api
       # Handle variables in form data, JSON body, or a blank value
       def token
         if session[:token].nil?
-          request&.headers["AUTH-TOKEN"]
+          request&.headers["authorization"]
         else
           session[:token]
         end

@@ -1,6 +1,6 @@
 module AuthHelper
 
-  SECRET_KEY = Rails.application.credentials.secret_key_base.freeze
+  SECRET_KEY = Rails.application.secrets.secret_key_base
 
   def user_sign_in(email, password)
     user = User.find_by(email: email)
