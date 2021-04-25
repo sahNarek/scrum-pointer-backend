@@ -17,6 +17,11 @@ module Mutations
           ticket: ticket,
           errors: []
         }
+        ScrumPointerBackendSchema.subscriptions.trigger(:ticket_added_to_voting_session, { voting_session_id: voting_session_id}, ticket)
+        {
+          ticket: ticket,
+          errors: []
+        }
       else
         begin
           ticket.validate!
