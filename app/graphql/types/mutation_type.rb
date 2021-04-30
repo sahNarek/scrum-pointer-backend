@@ -5,6 +5,7 @@ module Types
     field :create_voting_session, mutation: Mutations::CreateVotingSession
     field :create_ticket, mutation: Mutations::CreateTicket
     field :create_estimate, mutation: Mutations::CreateEstimate
+    field :update_estimate, mutation: Mutations::UpdateEstimate
     field :join_as_voter, mutation: Mutations::JoinAsVoter
   end
 end
