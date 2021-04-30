@@ -12,7 +12,9 @@ module Mutations
     def resolve(id:, **args)
       Estimate.find(id).tap do |estimate|
         estimate.update(args)
-      end 
+      end
+      # TODO create seperate subscription for updating
+      ScrumPointerBackendSchema.subscriptions.trigger(:estimate_added_to_ticket, { ticket_id: Estimate.find(id).ticket_id }, Estimate.find(id))
       {
         estimate: Estimate.find(id),
         errors: []
