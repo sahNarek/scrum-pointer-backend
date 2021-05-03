@@ -24,6 +24,37 @@ module AuthHelper
     end
   end
 
+  def join_as_voter(voter_id)
+    voter = Voter.find(voter_id)
+    errors = []
+    begin
+      exp_time = Time.now + 24.hours
+      payload = {
+        voter_id: voter_id,
+        exp_time: exp_time
+      }
+      token = JWT.encode payload, SECRET_KEY, 'HS256'
+      {voter: voter, token: token, exp_time: exp_time.strftime("%m-%d-%Y %H:%M"), errors: errors}
+    rescue JWT::EncodingError => e
+      errors << e.message
+      {voter: voter, token: token, exp_time: exp_time.strftime("%m-%d-%Y %H:%M"), errors: errors}
+    end
+  end
+
+  def find_voter_by_token(token)
+    return if token.blank?
+    begin 
+      payload = JWT.decode token, SECRET_KEY, true, algorithm: 'HS256'
+      voter_id = payload.first["voter_id"]
+      exp_time = payload.first["exp_time"]
+      Voter.find(voter_id) if exp_time >= Time.now
+    rescue JWT::DecodeError
+      nil
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+  end
+
   def find_user_by_token(token)
     return if token.blank?
     begin 
@@ -38,5 +69,5 @@ module AuthHelper
     end
   end
 
-  module_function :find_user_by_token, :user_sign_in
+  module_function :find_user_by_token, :user_sign_in, :join_as_voter, :find_voter_by_token
 end
