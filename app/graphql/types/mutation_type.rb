@@ -7,5 +7,6 @@ module Types
     field :create_estimate, mutation: Mutations::CreateEstimate
     field :update_estimate, mutation: Mutations::UpdateEstimate
     field :join_as_voter, mutation: Mutations::JoinAsVoter
+    field :expose_all_votes, mutation: Mutations::ExposeAllVotes
   end
 end

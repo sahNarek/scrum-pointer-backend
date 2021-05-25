@@ -13,6 +13,10 @@ module Mutations
           Estimate.where(ticket_id: ticket_id).update_all(:final_estimate => false)
         end
         Estimate.where(ticket_id: ticket_id).update_all(:final_estimate => true)
+        {
+          ticket: ticket,
+          errors: []
+        }
       rescue ActiveRecord::RecordNotFound
         {
           ticket: nil,
